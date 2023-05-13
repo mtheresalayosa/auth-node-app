@@ -5,12 +5,12 @@ Demo app using nodejs/express.js implementing:
 2. MongoDB Schema with 'mongoose'
 3. Musixmatch API Integration
 4. Unit Tests using Mocha, Supertest, and chai
+5. Audit logs with Winston and Morgan
 
 Built using:
 * Node.js LTS (v18.16.0)
 * npm (9.6.4)
 * MongoAtlas-DB (cloudserver) or MongoDB Compass v1.36.4
-* 
 
 ###### How to use
 1. Download/Fork github folder. 
