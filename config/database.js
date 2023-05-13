@@ -1,8 +1,9 @@
+const logger = require("../utils/logger");
 const mongoose = require("mongoose");
 const config = require("config");
 
 if (!config.get('PrivateKey')) {
-  console.error('FATAL ERROR: PrivateKey is not defined.');
+  logger.error('FATAL ERROR: PrivateKey is not defined.');
   process.exit(1);
 }
 
@@ -16,11 +17,11 @@ exports.connect = () => {
       useUnifiedTopology: true
     })
     .then(() => {
-      console.log("Successfully connected to database");
+      logger.info("Successfully connected to database");
     })
     .catch((error) => {
-      console.log("database connection failed. exiting now...");
-      console.error(error);
+      logger.info("database connection failed. exiting now...");
+      logger.error(error);
       process.exit(1);
     });
 };

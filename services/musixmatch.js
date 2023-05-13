@@ -1,3 +1,5 @@
+const logger = require("../utils/logger");
+
 const baseUrl = "http://api.musixmatch.com/ws/1.1/" 
 
 const searchArtist = async (artist, apiKey) => {
@@ -11,6 +13,7 @@ const searchArtist = async (artist, apiKey) => {
     });
 
     if (!result.ok) {
+        logger.warn("Musixmatch service cannot search artist.");
         throw new Error("Network response was not OK");
       }
     const response = await result.json();
@@ -40,6 +43,7 @@ const searchSong = async (track_title, apiKey)=> {
     });
 
     if (!result.ok) {
+        logger.warn("Musixmatch service cannot search song.");
         throw new Error("Network response was not OK");
       }
     const response = await result.json();

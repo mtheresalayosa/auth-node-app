@@ -1,4 +1,5 @@
 const config = require('config');
+const logger = require("../utils/logger");
 const User = require('../models/user');
 const auth = require('../middleware/auth');
 const express = require('express');
@@ -13,7 +14,8 @@ userRouter.post('/register', async (req, res) => {
 
     // Validate user input
     if (!(email && password && firstname && lastname)) {
-      res.status(400).send("All input is required");
+      logger.error("email, password, firstname, lastname are required");
+      res.status(400).send("All input are required");
     }
 
     // check if user already exist
@@ -21,7 +23,8 @@ userRouter.post('/register', async (req, res) => {
     const checkUser = await User.findOne({ email });
 
     if (checkUser) {
-      return res.status(409).send("User Already Exist. Please Login");
+      logger.error("User already exist.");
+      return res.status(409).send("User already exist. Please Login");
     }
 
     //Encrypt user password
@@ -45,9 +48,11 @@ userRouter.post('/register', async (req, res) => {
       }
     );
 
+    logger.info("Registered new user..");
     // return new user
     res.header('x-auth-token', token).status(201).json(user);
   } catch (err) {
+    logger.error(err);
     res.status(400).send(err);
   }
 });
@@ -57,7 +62,8 @@ userRouter.post('/login', async (req, res)=>{
         const { email, password } = req.body;
         
         if(!(email && password)){
-            return res.status(400).send("All fields are required.");
+          logger.error("Unable to login; email, password are required fields.");
+          return res.status(400).send("All fields are required.");
         }
         const user = await User.findOne({ email });
         if( user && (await bcrypt.compare(password, user.password))){
@@ -68,13 +74,15 @@ userRouter.post('/login', async (req, res)=>{
                   expiresIn: "2h",
                 }
               );
-    
+            logger.info("User logged in successfully");
             res.header('x-auth-token', token).status(200).json({user, message: "User logged in successfully."});
         }else{
-            res.status(400).send("Invalid Credentials");
+          logger.error("Invalid Credentials");
+          res.status(400).send("Invalid Credentials");
         }
     } catch (error) {
-        res.status(400).send(error);
+      logger.error(error);
+      res.status(400).send(error);
     }
 });
 
@@ -86,12 +94,15 @@ userRouter.get("/profile/:userId", auth, async(req, res)=>{
     const user = await User.findById(userId);
 
     if(user){
+      logger.info("Get user profile..");
       res.status(200).json(user);
     }else{
+      logger.error("User profile cannot be found.");
       res.status(404).send("User profile cannot be found.");
     }
 
   } catch (error) {
+    logger.error(error);
     res.status(400).send(error);
   }  
 });
@@ -103,7 +114,7 @@ userRouter.put('/profile/:userId', auth, async(req, res) =>{
     const user = await User.findById(userId);
 
     if(!user){
-      console.log(user)
+      logger.error("User profile cannot be found.");
       res.status(404).send("User profile cannot be found.");
     }
     
@@ -117,10 +128,12 @@ userRouter.put('/profile/:userId', auth, async(req, res) =>{
     user.email = reqdata.email ?? oldData.email;
     
     await user.save();
-
+    
+    logger.info("Success updating user profile");
     res.status(200).json({message: "User profile updated successfully."});
 
   } catch (error) {
+    logger.error(error);
     res.status(400).send(error);
   }  
 });
