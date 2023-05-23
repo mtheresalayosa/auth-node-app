@@ -2,6 +2,28 @@ const logger = require("../utils/logger");
 
 const baseUrl = "http://api.musixmatch.com/ws/1.1/" 
 
+const songApis = {
+    'search': 'track.search',
+    
+}
+
+const searchApis = {
+
+}
+/**
+ * commonalities:
+ * pagination {page_size: number, page: number}
+ * baseurl 
+ * apikey
+ * fetch
+ * 
+ * 
+ **/
+const connectMusix = (method, params, apikey, pagination) =>{
+
+}
+
+
 const searchArtist = async (artist, apiKey) => {
     const srcArtistApi = "artist.search";
     const pagination = "page_size=10&page=1";

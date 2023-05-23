@@ -5,4 +5,4 @@ const Artist = mongoose.model('Artist', new mongoose.Schema({
     active_year: { type: Number },
 }));
 
-module.exports = Artist;
+export default Artist;

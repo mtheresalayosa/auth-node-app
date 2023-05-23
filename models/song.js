@@ -7,4 +7,4 @@ const Song = mongoose.model('Song', new mongoose.Schema({
     genre: {type: String}
 }));
 
-module.exports = Song;
+export default Song;
